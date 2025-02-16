@@ -12,9 +12,11 @@ class GameBoard {
         this.player2 = player2;
         this.grid = Array(225).fill(null);
         this.currentPlayer = player1;
+        this.time = 60;
     }
 
     setBoard() {
+        setInterval(this.myTimer.bind(this), 1000);
         for (let i = 0; i < 225; i++) {
             const buttonContainer = document.createElement("div");
             buttonContainer.classList.add("buttonContainer");
@@ -28,6 +30,17 @@ class GameBoard {
             this.board.appendChild(buttonContainer);
         }
     }
+
+    myTimer() {
+        var timerValue = document.querySelector(".timerValue");
+        this.time-=1;
+        timerValue.textContent = this.time;
+        if(this.time == 0) {
+            this.time = 60;
+            this.togglePlayer();
+        }
+    }
+
     checkWinner(buttonIndex) {
         const directions = [
             { x: 1, y: 0 },  
@@ -74,7 +87,10 @@ class GameBoard {
             button.disabled = true;
         });
     }
-
+    togglePlayer() {
+        if(this.currentPlayer === this.player1) this.currentPlayer = this.player2;
+        else this.currentPlayer = this.player1;
+    }
     addButtonEvents(btn) {
         btn.addEventListener("click", () => {
             if (this.currentPlayer === this.player1) {
