@@ -13,6 +13,39 @@ class GameBoard {
         this.grid = Array(225).fill(null);
         this.currentPlayer = player1;
         this.time = 60;
+        this.ws = new WebSocket("ws://localhost:8082");
+    }
+    
+    connect() {
+        this.ws.addEventListener("open", () => {
+            console.log("You are connected to the server");
+        });
+        this.ws.addEventListener("message", (event) => {
+            const boardButtons = document.querySelectorAll(".boardButton");
+            boardButtons.forEach((btn) => {
+                if(btn.value == event.data) {
+                    if (this.currentPlayer === this.player1) {
+                        btn.classList.add("shinyButtonBlack");
+                        this.grid[Number(btn.value)] = "black";
+                        if(this.checkWinner(Number(btn.value))) {
+                            console.log("Black wins");
+                            this.disableAllButtons();
+                        }
+                        this.currentPlayer = this.player2; 
+                    } else {
+                        btn.classList.add("shinyButtonWhite");
+                        this.grid[Number(btn.value)] = "white";
+                        if(this.checkWinner(Number(btn.value))) {
+                            console.log("White wins");
+                            this.disableAllButtons();
+                        }
+                        this.currentPlayer = this.player1; 
+                    }
+            
+                    btn.disabled = true;
+                }
+            })
+        })
     }
 
     setBoard() {
@@ -96,6 +129,7 @@ class GameBoard {
             if (this.currentPlayer === this.player1) {
                 btn.classList.add("shinyButtonBlack");
                 this.grid[Number(btn.value)] = "black";
+                this.ws.send(btn.value.toString());
                 if(this.checkWinner(Number(btn.value))) {
                     console.log("Black wins");
                     this.disableAllButtons();
@@ -104,6 +138,7 @@ class GameBoard {
             } else {
                 btn.classList.add("shinyButtonWhite");
                 this.grid[Number(btn.value)] = "white";
+                this.ws.send(btn.value.toString());
                 if(this.checkWinner(Number(btn.value))) {
                     console.log("White wins");
                     this.disableAllButtons();
@@ -121,3 +156,4 @@ const player1 = new Player("black");
 const player2 = new Player("white");
 const currentBoard = new GameBoard(container, player1, player2);
 currentBoard.setBoard();
+currentBoard.connect();
