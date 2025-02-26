@@ -13,7 +13,7 @@ class GameBoard {
         this.grid = Array(225).fill(null);
         this.currentPlayer = player1;
         this.time = 60;
-        this.ws = new WebSocket("ws://192.168.2.14:8082");
+        this.ws = new WebSocket("wss://192.168.2.14:8082");
     }
     
     connect() {
