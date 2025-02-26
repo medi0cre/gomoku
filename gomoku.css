@@ -147,6 +147,16 @@ img, picture, video, canvas, svg {
 
 .currentPlayer {
   flex: 1;
+  color : black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  font-size: 45px;
+  font-weight: bold;
+  background-color: grey;
+  border-radius: 20px;
+  z-index: 1;
 }
 
 .lowerRight {

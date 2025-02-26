@@ -121,8 +121,16 @@ class GameBoard {
         });
     }
     togglePlayer() {
-        if(this.currentPlayer === this.player1) this.currentPlayer = this.player2;
-        else this.currentPlayer = this.player1;
+        if(this.currentPlayer === this.player1) {
+            this.currentPlayer = this.player2;
+            document.querySelector(".currentPlayer").textContent = "Current Player : White";
+            document.querySelector(".currentPlayer").style.color = "white";
+        } 
+        else {
+            this.currentPlayer = this.player1;
+            document.querySelector(".currentPlayer").textContent = "Current Player : Black";
+            document.querySelector(".currentPlayer").style.color = "black";
+        }
     }
     addButtonEvents(btn) {
         btn.addEventListener("click", () => {
@@ -134,7 +142,8 @@ class GameBoard {
                     console.log("Black wins");
                     this.disableAllButtons();
                 }
-                this.currentPlayer = this.player2; 
+                this.togglePlayer();
+                this.time = 60;
             } else {
                 btn.classList.add("shinyButtonWhite");
                 this.grid[Number(btn.value)] = "white";
@@ -143,7 +152,8 @@ class GameBoard {
                     console.log("White wins");
                     this.disableAllButtons();
                 }
-                this.currentPlayer = this.player1; 
+                this.togglePlayer();
+                this.time = 60;
             }
     
             btn.disabled = true;
